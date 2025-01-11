@@ -22,10 +22,10 @@ enum screenColourFadeData
 
     sTimer,
 
-    sRegionX,  // Added for region X position
-    sRegionY,  // Added for region Y position
-    sRegionWidth, // Added for region width
-    sRegionHeight // Added for region height
+    sRegionX,
+    sRegionY,
+    sRegionWidth,
+    sRegionHeight 
 }
 
 static
@@ -107,8 +107,7 @@ stock StopPlayerScreenColourFade(playerid)
 }
 
 forward public ScreenColourFadeTimer(playerid);
-public ScreenColourFadeTimer(playerid) 
-{
+public ScreenColourFadeTimer(playerid) {
     if (ScreenColourFadeData[playerid][sCurrentStep] == ScreenColourFadeData[playerid][sSteps]) 
     {
         _KillScreenColourFadeTimer(playerid);
@@ -171,8 +170,7 @@ public OnPlayerConnect(playerid)
     forward SCF_OnPlayerConnect(playerid);
 #endif
 
-public OnPlayerDisconnect(playerid, reason) 
-{
+public OnPlayerDisconnect(playerid, reason) {
     if (ScreenColourFadeData[playerid][sTimer] != -1) 
     {
         _KillScreenColourFadeTimer(playerid);
@@ -197,8 +195,7 @@ public OnPlayerDisconnect(playerid, reason)
 #endif
 
 
-stock FadeAllPlayersScreenColour(colour, time, steps) 
-{
+stock FadeAllPlayersScreenColour(colour, time, steps) {
     for (new playerid = 0; playerid < MAX_PLAYERS; playerid++) 
     {
         if (IsPlayerConnected(playerid)) 
@@ -227,7 +224,6 @@ stock FadePlayerScreenColourRegion(playerid, colour, time, steps, x, y, width, h
     ScreenColourFadeData[playerid][sSteps] = steps;
     ScreenColourFadeData[playerid][sCurrentStep] = 0;
 
-    // Store region coordinates
     ScreenColourFadeData[playerid][sRegionX] = x;
     ScreenColourFadeData[playerid][sRegionY] = y;
     ScreenColourFadeData[playerid][sRegionWidth] = width;
@@ -249,7 +245,6 @@ public ScreenColourFadeTimerRegion(playerid)
         return 1;
     }
 
-    // Apply the fade to the region
     TextDrawBoxColour(ScreenColourTD, InterpolateColours(ScreenColourFadeData[playerid][sOriginalColour], ScreenColourFadeData[playerid][sFinalColour], float(ScreenColourFadeData[playerid][sCurrentStep] + 1) / float(ScreenColourFadeData[playerid][sSteps])));
     TextDrawShowForPlayer(playerid, ScreenColourTD);
 
@@ -257,16 +252,18 @@ public ScreenColourFadeTimerRegion(playerid)
     return 1;
 }
 
-stock SetPlayerFader(playerid, fadeAmount) 
+stock SetPlayerFader(playerid, colour, fadeAmount) 
 {
     if (!IsPlayerConnected(playerid) || fadeAmount < 0 || fadeAmount > 100) 
     {
-        return 0;
+        return SendClientMessage(playerid, -1, "[FADER]: You must select a value between 0 & 100"); 
     }
 
     new colorOpacity = (fadeAmount * 255) / 100;
-    new color = 0xFF0000FF | (colorOpacity << 24);
 
-    _SetPlayerScreenColour(playerid, color);
+    new colorWithOpacity = (colour & 0x00FFFFFF) | (colorOpacity << 24);
+
+    _SetPlayerScreenColour(playerid, colorWithOpacity);
+    
     return 1;
 }

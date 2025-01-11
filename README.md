@@ -44,8 +44,6 @@ native StopPlayerScreenColourFade(playerid);
 ```
 Stops the ongoing fade. The colour of the player's screen will remain as it is at the time of the function call. Returns `1` if the specified player is connected and has an ongoing fade or `0` if not.
 
-## New Features
-
 ### `FadeAllPlayersScreenColour(colour, time, steps)`
 
 This function fades the screen colour for all connected players simultaneously.
@@ -66,6 +64,19 @@ This function applies the fade effect to a specific region of the player's scree
 FadePlayerScreenColourRegion(playerid, 0x00FF00FF, 1500, 10, 100.0, 100.0, 300.0, 200.0); // Fades a specific region to green
 ```
 
+### `SetPlayerFader(playerid, colour, fadeAmount) `
+
+```pawn
+SetPlayerFader(playerid, 0x00FF00FF, 100); // 0x00FF00FF is green with 100% opacity
+SetPlayerFader(playerid, 0x00FF00FF, 50);  // 0x00FF00FF is green with 50% opacity
+SetPlayerFader(playerid, 0x00FF00FF, 0); // 0x00FF00FF is green with 0% opacity
+```
+
+#### Usage:
+
+```pawn
+FadeAllPlayersScreenColour(0xFF0000FF, 2000, 10); // Fades all players' screens to red in 2 seconds with 10 steps
+```
 ## Callbacks
 
 ```pawn
