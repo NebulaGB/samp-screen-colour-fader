@@ -7,11 +7,13 @@ This library is a fork of the original project by [Kristo Isberg](https://github
 
 
 
-This library lets you add color filters to players' screens and fade between them. It was originally based on a modified version of Joe Staff's fader include, but as the previous implementation used a separate argument for each part of an RGBA color and had become outdated, I, NebulaGB, decided to create a more modern and efficient solution.
+This library lets you add color filters to players' screens and fade between them. It was originally based on a modified version of Joe Staff's fader include, but as the previous implementation used a separate argument for each part of an RGBA color and had become outdated
 
 The original fader was functional, but it was not as flexible or easy to use as I needed. As I was working on projects that required smoother, more customizable transitions between colors for player screens, I found myself in need of a more reliable and user-friendly fader library. Recognizing the limitations of the old solution, I decided to take over the project and overhaul the code to make it easier for developers to use while providing more robust functionality.
 
 My goal was to design a fader library that offered seamless transitions between screen colors, allowing for both full-screen color fades and region-specific fades. I also aimed for simplicity in its use so that developers could focus on their core features rather than worry about complex color management.
+
+This library works with open.mp
 
 ## Installation
 
