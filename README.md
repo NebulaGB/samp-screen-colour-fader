@@ -13,7 +13,7 @@ The original fader was functional, but it was not as flexible or easy to use as 
 
 This library works with open.mp
 
-Pawn Colour Manipulation is required for this library [Pawn Colour Manipulation](https://github.com/NebulaGB/pawn-colour-manipulation).
+[Pawn Colour Manipulation](https://github.com/NebulaGB/pawn-colour-manipulation) is required for this library.
 ## Installation
 
 Simply install to your project:
