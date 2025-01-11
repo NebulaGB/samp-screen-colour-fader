@@ -5,8 +5,6 @@ This library is a fork of the original project by [Kristo Isberg](https://github
 
 [![sampctl](https://img.shields.io/badge/sampctl-samp--screen--colour--fader-2f2f2f.svg?style=for-the-badge)](https://github.com/kristoisberg/samp-screen-colour-fader)
 
-**Notice:** This repository is not being actively maintained anymore. If anyone wishes to continue the development of the project, please create a fork of the repository and release future versions there.
-
 This library lets you add colour filters to players' screens and fade between them. Until today I was using a modified version of Joe Staff's fader include, but since it was using a separate argument for each part of an RGBA colour and the original was outdated in general, I decided to create my own. Here's what I came up with.
 
 ## Installation
@@ -14,7 +12,7 @@ This library lets you add colour filters to players' screens and fade between th
 Simply install to your project:
 
 ```bash
-sampctl package install kristoisberg/samp-screen-colour-fader
+sampctl package install NebulaGB/samp-screen-colour-fader
 ```
 
 Include in your code and begin using the library:
