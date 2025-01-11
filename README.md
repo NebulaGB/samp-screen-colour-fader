@@ -1,3 +1,4 @@
+
 # SA-MP Screen Colour Fader
 
 [![sampctl](https://img.shields.io/badge/sampctl-samp--screen--colour--fader-2f2f2f.svg?style=for-the-badge)](https://github.com/kristoisberg/samp-screen-colour-fader)
@@ -5,7 +6,6 @@
 **Notice:** This repository is not being actively maintained anymore. If anyone wishes to continue the development of the project, please create a fork of the repository and release future versions there.
 
 This library lets you add colour filters to players' screens and fade between them. Until today I was using a modified version of Joe Staff's fader include, but since it was using a separate argument for each part of an RGBA colour and the original was outdated in general, I decided to create my own. Here's what I came up with.
-
 
 ## Installation
 
@@ -20,7 +20,6 @@ Include in your code and begin using the library:
 ```pawn
 #include <screen-colour-fader>
 ```
-
 
 ## Functions
 
@@ -45,13 +44,33 @@ native StopPlayerScreenColourFade(playerid);
 ```
 Stops the ongoing fade. The colour of the player's screen will remain as it is at the time of the function call. Returns `1` if the specified player is connected and has an ongoing fade or `0` if not.
 
+## New Features
+
+### `FadeAllPlayersScreenColour(colour, time, steps)`
+
+This function fades the screen colour for all connected players simultaneously.
+
+#### Usage:
+
+```pawn
+FadeAllPlayersScreenColour(0xFF0000FF, 2000, 10); // Fades all players' screens to red in 2 seconds with 10 steps
+```
+
+### `FadePlayerScreenColourRegion(playerid, colour, time, steps, x, y, width, height)`
+
+This function applies the fade effect to a specific region of the player's screen, given the `x`, `y`, `width`, and `height` of the region.
+
+#### Usage:
+
+```pawn
+FadePlayerScreenColourRegion(playerid, 0x00FF00FF, 1500, 10, 100.0, 100.0, 300.0, 200.0); // Fades a specific region to green
+```
 
 ## Callbacks
 
 ```pawn
 forward public OnScreenColourFadeComplete(playerid);
 ```
-
 
 ## Notes
 
@@ -84,7 +103,6 @@ public OnScreenColourFadeComplete(playerid) {
 	return 1;
 }
 ```
-
 
 ## Testing
 

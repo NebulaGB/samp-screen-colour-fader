@@ -3,17 +3,14 @@
 #endif
 #define _SCF_included
 
-
-#include <a_samp>
+#include <open.mp>
 #include <colour-manipulation>
-
 
 #define SetPlayerScreenColor SetPlayerScreenColour
 #define GetPlayerScreenColor GetPlayerScreenColour
 #define FadePlayerScreenColor FadePlayerScreenColour
 #define StopPlayerScreenColorFade StopPlayerScreenColourFade
 #define OnScreenColorFadeComplete OnScreenColourFadeComplete
-
 
 enum screenColourFadeData {
     sSteps,
@@ -22,9 +19,13 @@ enum screenColourFadeData {
     sOriginalColour,
     sFinalColour,
 
-    sTimer
-}
+    sTimer,
 
+    sRegionX,  // Added for region X position
+    sRegionY,  // Added for region Y position
+    sRegionWidth, // Added for region width
+    sRegionHeight // Added for region height
+}
 
 static
     ScreenColour[MAX_PLAYERS],
@@ -32,17 +33,14 @@ static
     ScreenColourFadeData[MAX_PLAYERS][screenColourFadeData]
 ;
 
-
 forward public OnScreenColourFadeComplete(playerid);
-
 
 static stock _SetPlayerScreenColour(playerid, colour) {
     ScreenColour[playerid] = colour;
 
-    TextDrawBoxColor(ScreenColourTD, ScreenColour[playerid]);
+    TextDrawBoxColour(ScreenColourTD, ScreenColour[playerid]);
     TextDrawShowForPlayer(playerid, ScreenColourTD);
 }
-
 
 stock SetPlayerScreenColour(playerid, colour) {
     if (!IsPlayerConnected(playerid)) {
@@ -53,7 +51,6 @@ stock SetPlayerScreenColour(playerid, colour) {
     return 1;
 }
 
-
 stock GetPlayerScreenColour(playerid) {
     if (!IsPlayerConnected(playerid)) {
         return 0x00000000;
@@ -62,13 +59,11 @@ stock GetPlayerScreenColour(playerid) {
     return ScreenColour[playerid];
 }
 
-
 static stock _KillScreenColourFadeTimer(playerid) {
     KillTimer(ScreenColourFadeData[playerid][sTimer]);
 
     ScreenColourFadeData[playerid][sTimer] = -1;
 }
-
 
 stock FadePlayerScreenColour(playerid, colour, time, steps) {
     if (!IsPlayerConnected(playerid) || steps < 1 || time < 0) {
@@ -90,7 +85,6 @@ stock FadePlayerScreenColour(playerid, colour, time, steps) {
     return 1;
 }
 
-
 stock StopPlayerScreenColourFade(playerid) {
     if (!IsPlayerConnected(playerid) || ScreenColourFadeData[playerid][sTimer] == -1) {
         return 0;
@@ -99,7 +93,6 @@ stock StopPlayerScreenColourFade(playerid) {
     _KillScreenColourFadeTimer(playerid);
     return 1;
 }
-
 
 forward public ScreenColourFadeTimer(playerid);
 public ScreenColourFadeTimer(playerid) {
@@ -115,7 +108,6 @@ public ScreenColourFadeTimer(playerid) {
     ScreenColourFadeData[playerid][sCurrentStep]++;
     return 1;
 }
-
 
 public OnGameModeInit() {
     ScreenColourTD = TextDrawCreate(0.0, 0.0, "_");
@@ -141,7 +133,6 @@ public OnGameModeInit() {
     forward SCF_OnGameModeInit();
 #endif
 
-
 public OnPlayerConnect(playerid) {
     ScreenColourFadeData[playerid][sTimer] = -1;
 
@@ -165,7 +156,6 @@ public OnPlayerConnect(playerid) {
     forward SCF_OnPlayerConnect(playerid);
 #endif
 
-
 public OnPlayerDisconnect(playerid, reason) {
     if (ScreenColourFadeData[playerid][sTimer] != -1) {
         _KillScreenColourFadeTimer(playerid);
@@ -188,3 +178,59 @@ public OnPlayerDisconnect(playerid, reason) {
 #if defined SCF_OnPlayerDisconnect
     forward SCF_OnPlayerDisconnect(playerid, reason);
 #endif
+
+
+// New function to fade the screen color for all players
+stock FadeAllPlayersScreenColour(colour, time, steps) {
+    for (new playerid = 0; playerid < MAX_PLAYERS; playerid++) {
+        if (IsPlayerConnected(playerid)) {
+            FadePlayerScreenColour(playerid, colour, time, steps);
+        }
+    }
+    return 1;
+}
+
+// New function to fade a specific region of the screen
+stock FadePlayerScreenColourRegion(playerid, colour, time, steps, x, y, width, height) {
+    if (!IsPlayerConnected(playerid) || steps < 1 || time < 0) {
+        return 0;
+    }
+
+    if (ScreenColourFadeData[playerid][sTimer] != -1) {
+        KillTimer(ScreenColourFadeData[playerid][sTimer]);
+    }
+
+    ScreenColourFadeData[playerid][sOriginalColour] = ScreenColour[playerid];
+    ScreenColourFadeData[playerid][sFinalColour] = colour;
+
+    ScreenColourFadeData[playerid][sSteps] = steps;
+    ScreenColourFadeData[playerid][sCurrentStep] = 0;
+
+    // Store region coordinates
+    ScreenColourFadeData[playerid][sRegionX] = x;
+    ScreenColourFadeData[playerid][sRegionY] = y;
+    ScreenColourFadeData[playerid][sRegionWidth] = width;
+    ScreenColourFadeData[playerid][sRegionHeight] = height;
+
+    ScreenColourFadeData[playerid][sTimer] = SetTimerEx("ScreenColourFadeTimerRegion", time / steps, true, "i", playerid);
+
+    return 1;
+}
+
+forward ScreenColourFadeTimerRegion(playerid);
+public ScreenColourFadeTimerRegion(playerid) 
+{
+    if (ScreenColourFadeData[playerid][sCurrentStep] == ScreenColourFadeData[playerid][sSteps]) {
+        _KillScreenColourFadeTimer(playerid);
+
+        CallLocalFunction("OnScreenColourFadeComplete", "i", playerid);
+        return 1;
+    }
+
+    // Apply the fade to the region
+    TextDrawBoxColour(ScreenColourTD, InterpolateColours(ScreenColourFadeData[playerid][sOriginalColour], ScreenColourFadeData[playerid][sFinalColour], float(ScreenColourFadeData[playerid][sCurrentStep] + 1) / float(ScreenColourFadeData[playerid][sSteps])));
+    TextDrawShowForPlayer(playerid, ScreenColourTD);
+
+    ScreenColourFadeData[playerid][sCurrentStep]++;
+    return 1;
+}
