@@ -72,11 +72,6 @@ SetPlayerFader(playerid, 0x00FF00FF, 50);  // 0x00FF00FF is green with 50% opaci
 SetPlayerFader(playerid, 0x00FF00FF, 0); // 0x00FF00FF is green with 0% opacity
 ```
 
-#### Usage:
-
-```pawn
-FadeAllPlayersScreenColour(0xFF0000FF, 2000, 10); // Fades all players' screens to red in 2 seconds with 10 steps
-```
 ## Callbacks
 
 ```pawn
