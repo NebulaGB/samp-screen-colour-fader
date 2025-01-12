@@ -21,13 +21,13 @@ Include in your code and begin using the library:
 ## Functions
 
 ```pawn
-SetPlayerScreenColour(playerid, colour)
-GetPlayerScreenColour(playerid)
-FadePlayerScreenColour(playerid, colour, time, steps)
-StopPlayerScreenColourFade(playerid)
-FadeAllPlayersScreenColour(colour, time, steps)
-FadePlayerScreenColourRegion(playerid, colour, time, steps, x, y, width, height)
-SetPlayerFader(playerid, colour, fadeAmount) 
+SetPlayerScreenColour(playerid, colour);
+GetPlayerScreenColour(playerid);
+FadePlayerScreenColour(playerid, colour, time, steps);
+StopPlayerScreenColourFade(playerid);
+FadeAllPlayersScreenColour(colour, time, steps);
+FadePlayerScreenColourRegion(playerid, colour, time, steps, x, y, width, height);
+SetPlayerFader(playerid, colour, fadeAmount);
 ```
 
 ## Callbacks
