@@ -106,8 +106,9 @@ stock StopPlayerScreenColourFade(playerid)
     return 1;
 }
 
-forward public ScreenColourFadeTimer(playerid);
-public ScreenColourFadeTimer(playerid) {
+forward ScreenColourFadeTimer(playerid);
+public ScreenColourFadeTimer(playerid) 
+{
     if (ScreenColourFadeData[playerid][sCurrentStep] == ScreenColourFadeData[playerid][sSteps]) 
     {
         _KillScreenColourFadeTimer(playerid);
@@ -122,7 +123,8 @@ public ScreenColourFadeTimer(playerid) {
     return 1;
 }
 
-public OnGameModeInit() {
+public OnGameModeInit() 
+{
     ScreenColourTD = TextDrawCreate(0.0, 0.0, "_");
     TextDrawTextSize(ScreenColourTD, 640.0, 480.0);
     TextDrawLetterSize(ScreenColourTD, 0.0, 50.0);
@@ -158,42 +160,6 @@ public OnPlayerConnect(playerid)
         return 1;
     #endif
 }
-
-#if defined _ALS_OnPlayerConnect
-    #undef OnPlayerConnect
-#else
-    #define _ALS_OnPlayerConnect
-#endif
-#define OnPlayerConnect SCF_OnPlayerConnect
-
-#if defined SCF_OnPlayerConnect
-    forward SCF_OnPlayerConnect(playerid);
-#endif
-
-public OnPlayerDisconnect(playerid, reason) {
-    if (ScreenColourFadeData[playerid][sTimer] != -1) 
-    {
-        _KillScreenColourFadeTimer(playerid);
-    }
-
-    #if defined SCF_OnPlayerDisconnect
-        return SCF_OnPlayerDisconnect(playerid, reason);
-    #else
-        return 1;
-    #endif
-}
-
-#if defined _ALS_OnPlayerDisconnect
-    #undef OnPlayerDisconnect
-#else
-    #define _ALS_OnPlayerDisconnect
-#endif
-#define OnPlayerDisconnect SCF_OnPlayerDisconnect
-
-#if defined SCF_OnPlayerDisconnect
-    forward SCF_OnPlayerDisconnect(playerid, reason);
-#endif
-
 
 stock FadeAllPlayersScreenColour(colour, time, steps) {
     for (new playerid = 0; playerid < MAX_PLAYERS; playerid++) 
@@ -267,3 +233,40 @@ stock SetPlayerFader(playerid, colour, fadeAmount)
     
     return 1;
 }
+
+
+#if defined _ALS_OnPlayerConnect
+    #undef OnPlayerConnect
+#else
+    #define _ALS_OnPlayerConnect
+#endif
+#define OnPlayerConnect SCF_OnPlayerConnect
+
+#if defined SCF_OnPlayerConnect
+    forward SCF_OnPlayerConnect(playerid);
+#endif
+
+public OnPlayerDisconnect(playerid, reason) 
+{
+    if (ScreenColourFadeData[playerid][sTimer] != -1) 
+    {
+        _KillScreenColourFadeTimer(playerid);
+    }
+
+    #if defined SCF_OnPlayerDisconnect
+        return SCF_OnPlayerDisconnect(playerid, reason);
+    #else
+        return 1;
+    #endif
+}
+
+#if defined _ALS_OnPlayerDisconnect
+    #undef OnPlayerDisconnect
+#else
+    #define _ALS_OnPlayerDisconnect
+#endif
+#define OnPlayerDisconnect SCF_OnPlayerDisconnect
+
+#if defined SCF_OnPlayerDisconnect
+    forward SCF_OnPlayerDisconnect(playerid, reason);
+#endif
